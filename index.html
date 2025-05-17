@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/witimex/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WiTime - Centro del tiempo</title>
+    <meta name="description" content="WiTime - Tu centro completo para todas las funciones relacionadas con el tiempo, fechas, calendarios, convertidores y más." />
+    <script type="module" crossorigin src="/witimex/assets/index-DDiQ5VoN.js"></script>
+    <link rel="stylesheet" crossorigin href="/witimex/assets/index-DQ7fnS3S.css">
+  </head>
+  <body>
+    <div class="app-wrapper">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <div class="logo">
+            <i class="fas fa-clock logo-icon"></i>
+            <div class="logo-text">WiTime</div>
+          </div>
+          <button class="sidebar-toggle" id="sidebarToggle">
+            <i class="fas fa-angle-left"></i>
+          </button>
+        </div>
+        <nav class="nav-links">
+          <div class="nav-link active" data-section="dashboard">
+            <i class="fas fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+          </div>
+          <div class="nav-link" data-section="calculator">
+            <i class="fas fa-calculator"></i>
+            <span>Calculadora</span>
+          </div>
+          <div class="nav-link" data-section="converter">
+            <i class="fas fa-exchange-alt"></i>
+            <span>Conversor</span>
+          </div>
+          <div class="nav-link" data-section="timezone">
+            <i class="fas fa-globe"></i>
+            <span>Zonas Horarias</span>
+          </div>
+          <div class="nav-link" data-section="calendar">
+            <i class="fas fa-calendar-alt"></i>
+            <span>Calendario</span>
+          </div>
+          <div class="nav-link" data-section="timer">
+            <i class="fas fa-clock"></i>
+            <span>Temporizador</span>
+          </div>
+        </nav>
+        <div class="sidebar-footer">
+          <button class="theme-toggle" id="themeToggle">
+            <i class="fas fa-moon"></i>
+            <span>Modo oscuro</span>
+          </button>
+        </div>
+      </aside>
+      
+      <!-- Overlay para móvil -->
+      <div class="sidebar-overlay"></div>
+      
+      <!-- Contenido principal -->
+      <main class="main-content">
+        <header class="content-header">
+          <button class="mobile-menu-toggle" id="mobileMenuToggle">
+            <i class="fas fa-bars"></i>
+          </button>
+          <h1 class="page-title" id="pageTitle">Dashboard</h1>
+          <div class="header-actions">
+            <button class="header-action-btn" id="refreshBtn" title="Actualizar">
+              <i class="fas fa-sync-alt"></i>
+            </button>
+            <button class="header-action-btn" id="helpBtn" title="Ayuda">
+              <i class="fas fa-question-circle"></i>
+            </button>
+          </div>
+        </header>
+        
+        <div class="content-container">
+          <!-- Dashboard -->
+          <section id="dashboard" class="content-section active">
+            <div class="glass-card">
+              <div class="card-header">
+                <div class="card-title">
+                  <i class="fas fa-tachometer-alt"></i>
+                  Dashboard de Tiempo
+                </div>
+              </div>
+              <div class="card-body">
+                <h2 class="greeting-text" id="greeting">¡Bienvenido! 😊</h2>
+                <p style="margin-bottom: 20px;">Tu centro completo para todas las funciones relacionadas con el tiempo.</p>
+                <div class="time-dashboard" id="timeDashboard">
+                  <!-- Se llenará dinámicamente con JS -->
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Calculadora de Tiempo -->
+          <section id="calculator" class="content-section">
+            <div class="glass-card">
+              <div class="card-header">
+                <div class="card-title">
+                  <i class="fas fa-calculator"></i>
+                  Calculadora de Tiempo
+                </div>
+              </div>
+              <div class="card-body">
+                <p style="margin-bottom: 20px;">Calcula la diferencia entre dos fechas en diferentes unidades de tiempo.</p>
+                <div class="calculator-container">
+                  <div class="calculator-form">
+                    <div class="input-group">
+                      <label>Fecha y Hora Inicial</label>
+                      <input type="datetime-local" id="startDateTime" required>
+                    </div>
+                    <div class="input-group">
+                      <label>Fecha y Hora Final</label>
+                      <input type="datetime-local" id="endDateTime" required>
+                    </div>
+                  </div>
+                  
+                  <button class="button" id="calculateDifference">
+                    <i class="fas fa-calculator"></i> Calcular Diferencia
+                  </button>
+                  
+                  <div class="results-container">
+                    <div class="result-card">
+                      <h3>Años, Meses, Días</h3>
+                      <div class="result-value" id="yearMonthDay">--</div>
+                    </div>
+                    <div class="result-card">
+                      <h3>Días Totales</h3>
+                      <div class="result-value" id="totalDays">--</div>
+                    </div>
+                    <div class="result-card">
+                      <h3>Horas, Minutos, Segundos</h3>
+                      <div class="result-value" id="hourMinuteSecond">--</div>
+                    </div>
+                    <div class="result-card">
+                      <h3>Segundos Totales</h3>
+                      <div class="result-value" id="totalSeconds">--</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="glass-card">
+              <div class="card-header">
+                <div class="card-title">
+                  <i class="fas fa-hourglass-half"></i>
+                  Calculadora de Edad
+                </div>
+              </div>
+              <div class="card-body">
+                <p style="margin-bottom: 20px;">Calcula tu edad exacta desde tu fecha de nacimiento.</p>
+                <div class="calculator-container">
+                  <div class="calculator-form">
+                    <div class="input-group">
+                      <label>Fecha de Nacimiento</label>
+                      <input type="date" id="birthDate" required>
+                    </div>
+                  </div>
+                  
+                  <button class="button" id="calculateAge">
+                    <i class="fas fa-birthday-cake"></i> Calcular Edad
+                  </button>
+                  
+                  <div class="results-container">
+                    <div class="result-card">
+                      <h3>Edad Actual</h3>
+                      <div class="result-value" id="currentAge">--</div>
+                    </div>
+                    <div class="result-card">
+                      <h3>Próximo Cumpleaños</h3>
+                      <div class="result-value" id="nextBirthday">--</div>
+                    </div>
+                    <div class="result-card">
+                      <h3>Días Vividos</h3>
+                      <div class="result-value" id="daysLived">--</div>
+                    </div>
+                    <div class="result-card">
+                      <h3>Horas Vividas</h3>
+                      <div class="result-value" id="hoursLived">--</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Conversor de Unidades de Tiempo -->
+          <section id="converter" class="content-section">
+            <div class="glass-card">
+              <div class="card-header">
+                <div class="card-title">
+                  <i class="fas fa-exchange-alt"></i>
+                  Conversor de Unidades de Tiempo
+                </div>
+              </div>
+              <div class="card-body">
+                <p style="margin-bottom: 20px;">Convierte entre diferentes unidades de tiempo con precisión.</p>
+                <div class="converter-container">
+                  <div class="calculator-form">
+                    <div class="input-group">
+                      <label>Valor</label>
+                      <input type="number" id="timeValue" placeholder="Ingrese un valor">
+                    </div>
+                    <div class="input-group">
+                      <label>Unidad de Origen</label>
+                      <select id="fromUnit">
+                        <option value="seconds">Segundos</option>
+                        <option value="minutes">Minutos</option>
+                        <option value="hours">Horas</option>
+                        <option value="days">Días</option>
+                        <option value="weeks">Semanas</option>
+                        <option value="months">Meses</option>
+                        <option value="years">Años</option>
+                        <option value="decades">Décadas</option>
+                        <option value="centuries">Siglos</option>
+                        <option value="millennia">Milenios</option>
+                      </select>
+                    </div>
+                    <div class="input-group">
+                      <label>Unidad de Destino</label>
+                      <select id="toUnit">
+                        <option value="seconds">Segundos</option>
+                        <option value="minutes">Minutos</option>
+                        <option value="hours">Horas</option>
+                        <option value="days">Días</option>
+                        <option value="weeks">Semanas</option>
+                        <option value="months">Meses</option>
+                        <option value="years">Años</option>
+                        <option value="decades">Décadas</option>
+                        <option value="centuries">Siglos</option>
+                        <option value="millennia">Milenios</option>
+                      </select>
+                    </div>
+                  </div>
+                  
+                  <button class="button" id="convertTime">
+                    <i class="fas fa-sync"></i> Convertir
+                  </button>
+                  
+                  <div class="result-card">
+                    <h3>Resultado</h3>
+                    <div class="result-value" id="conversionResult">--</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="glass-card">
+              <div class="card-header">
+                <div class="card-title">
+                  <i class="fas fa-history"></i>
+                  Tiempo Unix y Época
+                </div>
+              </div>
+              <div class="card-body">
+                <p style="margin-bottom: 20px;">Convierte entre timestamps Unix y fechas legibles.</p>
+                <div class="converter-container">
+                  <div class="calculator-form">
+                    <div class="input-group">
+                      <label>Timestamp Unix (segundos desde 1 Enero 1970)</label>
+                      <input type="number" id="unixTimestamp" placeholder="Timestamp Unix">
+                    </div>
+                    <div class="input-group">
+                      <label>Fecha y Hora</label>
+                      <input type="datetime-local" id="dateTimeInput">
+                    </div>
+                  </div>
+                  
+                  <div class="flex gap-20">
+                    <button class="button" id="convertUnixToDate">
+                      <i class="fas fa-arrow-down"></i> Unix a Fecha
+                    </button>
+                    <button class="button" id="convertDateToUnix">
+                      <i class="fas fa-arrow-up"></i> Fecha a Unix
+                    </button>
+                  </div>
+                  
+                  <div class="results-container">
+                    <div class="result-card">
+                      <h3>Resultado en Fecha</h3>
+                      <div class="result-value" id="dateResult">--</div>
+                    </div>
+                    <div class="result-card">
+                      <h3>Resultado en Unix</h3>
+                      <div class="result-value" id="unixResult">--</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Zonas Horarias -->
+          <section id="timezone" class="content-section">
+            <div class="glass-card">
+              <div class="card-header">
+                <div class="card-title">
+                  <i class="fas fa-globe"></i>
+                  Zonas Horarias Mundiales
+                </div>
+              </div>
+              <div class="card-body">
+                <p style="margin-bottom: 20px;">Consulta la hora actual en diferentes zonas horarias del mundo.</p>
+                
+                <!-- Filtros de regiones -->
+                <div class="timezone-filter" id="timezoneFilter">
+                  <button class="timezone-filter-button active" data-region="all">Todas</button>
+                  <button class="timezone-filter-button" data-region="Sudamérica">Sudamérica</button>
+                  <button class="timezone-filter-button" data-region="Europa">Europa</button>
+                  <button class="timezone-filter-button" data-region="Norteamérica">Norteamérica</button>
+                  <button class="timezone-filter-button" data-region="Asia">Asia</button>
+                  <button class="timezone-filter-button" data-region="Oceanía">Oceanía</button>
+                  <button class="timezone-filter-button" data-region="Oriente Medio">Oriente Medio</button>
+                </div>
+                
+                <div class="timezone-container" id="timezoneContainer">
+                  <!-- Se llenará dinámicamente con JS -->
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Calendario -->
+          <section id="calendar" class="content-section">
+            <div class="glass-card">
+              <div class="card-header">
+                <div class="card-title">
+                  <i class="fas fa-calendar-alt"></i>
+                  Calendario
+                </div>
+              </div>
+              <div class="card-body">
+                <p style="margin-bottom: 20px;">Visualiza y organiza tus eventos en un completo calendario interactivo.</p>
+                <div class="calendar-container">
+                  <div class="calendar-loading">
+                    <div class="calendar-spinner"></div>
+                  </div>
+                  <div id="fullCalendar"></div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Temporizador y Cronómetro -->
+          <section id="timer" class="content-section">
+            <div class="glass-card">
+              <div class="card-header">
+                <div class="card-title">
+                  <i class="fas fa-clock"></i>
+                  Temporizador y Cronómetro
+                </div>
+              </div>
+              <div class="card-body">
+                <p style="margin-bottom: 20px;">Herramientas para contar el tiempo hacia atrás o hacia adelante.</p>
+                <div class="timer-container">
+                  <div class="glass-card">
+                    <div class="card-header">
+                      <div class="card-title">
+                        <i class="fas fa-hourglass-half"></i>
+                        Temporizador
+                      </div>
+                    </div>
+                    <div class="card-body">
+                      <div class="input-group">
+                        <label>Ajustar tiempo (minutos)</label>
+                        <input type="number" id="timerMinutes" min="1" max="999" value="5">
+                      </div>
+                      <div class="timer-display" id="timerDisplay">05:00</div>
+                      <div class="timer-controls">
+                        <button class="button" id="startTimer"><i class="fas fa-play"></i></button>
+                        <button class="button" id="pauseTimer"><i class="fas fa-pause"></i></button>
+                        <button class="button" id="resetTimer"><i class="fas fa-undo"></i></button>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="glass-card">
+                    <div class="card-header">
+                      <div class="card-title">
+                        <i class="fas fa-stopwatch"></i>
+                        Cronómetro
+                      </div>
+                    </div>
+                    <div class="card-body">
+                      <div class="stopwatch-display" id="stopwatchDisplay">00:00:00</div>
+                      <div class="stopwatch-controls">
+                        <button class="button" id="startStopwatch"><i class="fas fa-play"></i></button>
+                        <button class="button" id="pauseStopwatch"><i class="fas fa-pause"></i></button>
+                        <button class="button" id="resetStopwatch"><i class="fas fa-undo"></i></button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          
+          <!-- Pie de página -->
+          <footer class="app-footer">
+            <p>&copy; 2023 WiTime - Tu Centro del Tiempo | Desarrollado con <i class="fas fa-heart heart-icon"></i> por JuanR</p>
+          </footer>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
