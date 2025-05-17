@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build":  "vite build",
+    "build": "vite build",
+    "build:version": "vite build --mode",
     "preview": "vite preview",
-    "deploy": "gh-pages -d dist"
+    "tag-version": "node scripts/tag-version.js"
   },
   "devDependencies": {
     "gh-pages": "^6.3.0",
