@@ -1,0 +1,47 @@
+name: Deploy Witimex Versions
+
+on:
+  push:
+    tags:
+      - 'v*' # Escucha cualquier tag que comience con "v"
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Clona el repositorio
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 2. Configura Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      # 3. Instala dependencias
+      - name: Install dependencies
+        run: npm install
+
+      # 4. Construye el proyecto usando el tag como versión
+      - name: Build project
+        run: npm run build -- --mode ${{ github.ref_name }}
+
+      # 5. Copia los archivos generados a la carpeta de la versión
+      - name: Copy to version folder
+        run: |
+          mkdir -p ./versions/${{ github.ref_name }}
+          cp -r dist/* ./versions/${{ github.ref_name }}
+
+      # 6. Copia los archivos de la última versión a la raíz
+      - name: Copy latest version to root
+        run: |
+          cp -r dist/* ./
+
+      # 7. Despliega en GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .

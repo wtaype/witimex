@@ -1,5 +1,8 @@
 import { defineConfig } from 'vite';
 
-export default defineConfig({
-  base: '/witimex/', // Asegúrate de que el nombre del repositorio sea correcto
+export default defineConfig(({ mode }) => {
+  const base = mode === 'v20' ? '/witimex/v20/' : '/witimex/';
+  return {
+    base,
+  };
 });
