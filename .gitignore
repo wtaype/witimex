@@ -7,18 +7,49 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# Dependencias
+node_modules/
 
-# Editor directories and files
+# Archivos de construcción
+dist/
+dist-ssr/
+
+# Archivos de configuración sensibles
+.env
+.env.local
+.env.*.local
+
+# Archivos de lock específicos de paquetes
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Archivos del editor
 .vscode/*
 !.vscode/extensions.json
-.idea
-.DS_Store
+.idea/
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos temporales
+*.tmp
+*.temp
+*.bak
+*.old
+
+# Archivos de Git
+.git/
+.gitignore
+
+# Otros
+coverage/
+*.pid
+*.seed
+*.pid.lock
