@@ -1,5 +1,6 @@
 import { execSync } from 'child_process';
 import fs from 'fs';
+import path from 'path';
 
 // Obtener la versión de la línea de comandos
 const version = process.argv[2];
@@ -19,8 +20,21 @@ try {
     // El tag no existe, podemos continuar
   }
 
-  // Actualizar la versión en el HTML para que refleje qué versión es
-  const indexPath = './index.html';
+  // Buscar el index.html en el directorio correcto
+  // Primero intentamos en el directorio actual y luego en el directorio raíz
+  let indexPath = './index.html';
+  
+  if (!fs.existsSync(indexPath)) {
+    // Intenta buscar en el directorio raíz del proyecto
+    indexPath = path.resolve(process.cwd(), '../index.html');
+    
+    if (!fs.existsSync(indexPath)) {
+      console.error('No se pudo encontrar el archivo index.html');
+      process.exit(1);
+    }
+  }
+  
+  console.log(`Actualizando archivo: ${indexPath}`);
   let indexContent = fs.readFileSync(indexPath, 'utf8');
   
   // Buscar la línea donde está el título del Dashboard
@@ -37,7 +51,7 @@ try {
   execSync(`git tag -a ${version} -m "Versión ${version}"`);
   
   console.log(`\nVersión ${version} creada exitosamente!`);
-  console.log(`\nPara subir los cambios, ejecuta:`);
+  console.log(`\nPara subir los cambios, ejecuta manualmente:`);
   console.log(`git push origin main && git push origin ${version}`);
 
 } catch (error) {
