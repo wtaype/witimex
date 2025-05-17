@@ -1,122 +1,36 @@
-name: Deploy Witimex Versions
+name: build-and-deploy
 
+# Ejecutar en push a la rama main
 on:
   push:
-    branches:
-      - main
-    tags:
-      - 'v*' # Escucha cualquier tag que comience con "v"
+    branches: [ main ]
+
+# Permisos necesarios para publicación
+permissions:
+  contents: write
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-
+    
     steps:
-      # 1. Checkout code con soporte completo para historial y tags
-      - name: Checkout code
+      - name: Checkout 🛎️
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 0 # Obtener todo el historial y tags
-
-      # 2. Configurar Node.js
-      - name: Setup Node.js
+        
+      - name: Setup Node.js ⚙️
         uses: actions/setup-node@v3
         with:
-          node-version: 18
-          cache: 'npm'
-
-      # 3. Instalar dependencias
-      - name: Install dependencies
-        run: npm ci
-
-      # 4. Detectar contexto (tag o rama principal)
-      - name: Set build context
-        id: context
-        run: |
-          if [[ $GITHUB_REF == refs/tags/v* ]]; then
-            echo "is_tag=true" >> $GITHUB_OUTPUT
-            echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-          else
-            echo "is_tag=false" >> $GITHUB_OUTPUT
-            echo "version=latest" >> $GITHUB_OUTPUT
-          fi
-
-      # 5. Construir versión específica (solo si es tag)
-      - name: Build version
-        if: steps.context.outputs.is_tag == 'true'
-        run: |
-          npm run build -- --mode ${{ steps.context.outputs.version }}
-          mkdir -p dist/versions/${{ steps.context.outputs.version }}
-          cp -r dist-${{ steps.context.outputs.version }}/* dist/versions/${{ steps.context.outputs.version }}/
-
-      # 6. Construir versión principal (para todos los casos)
-      - name: Build main version
-        run: npm run build
-
-      # 7. Preparar índice de versiones
-      - name: Create version index
-        run: |
-          mkdir -p dist/versions
-          echo "<!DOCTYPE html>
-          <html lang='es'>
-          <head>
-            <meta charset='UTF-8'>
-            <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-            <title>WiTime - Versiones</title>
-            <link rel='stylesheet' href='/witimex/style.css'>
-          </head>
-          <body>
-            <div class='app-wrapper'>
-              <main class='main-content'>
-                <header class='content-header'>
-                  <h1 class='page-title'>WiTime - Versiones Disponibles</h1>
-                </header>
-                <div class='content-container'>
-                  <div class='glass-card'>
-                    <div class='card-header'>
-                      <div class='card-title'>
-                        <i class='fas fa-code-branch'></i>
-                        Versiones
-                      </div>
-                    </div>
-                    <div class='card-body'>
-                      <ul class='version-list'>" > dist/versions/index.html
-
-          # Añadir la última versión
-          echo "<li><a href='/witimex/'><strong>Última Versión</strong></a></li>" >> dist/versions/index.html
+          node-version: '18'
           
-          # Añadir todas las versiones disponibles (tags)
-          for tag in $(git tag -l 'v*' | sort -r); do
-            echo "<li><a href='/witimex/versions/$tag/'>$tag</a></li>" >> dist/versions/index.html
-          done
-          
-          echo "</ul>
-                    </div>
-                  </div>
-                </div>
-                <footer class='app-footer'>
-                  <p>&copy; 2023-$(date +%Y) WiTime - Tu Centro del Tiempo | Desarrollado con ❤️ por @wilder.taype</p>
-                </footer>
-              </main>
-            </div>
-            <script>
-              // Asegúrate de que los estilos existan
-              document.addEventListener('DOMContentLoaded', function() {
-                if (!document.querySelector('link[href*=\"/witimex/style.css\"]')) {
-                  const link = document.createElement('link');
-                  link.rel = 'stylesheet';
-                  link.href = '/witimex/style.css';
-                  document.head.appendChild(link);
-                }
-              });
-            </script>
-          </body>
-          </html>" >> dist/versions/index.html
-      
-      # 8. Desplegar en GitHub Pages
-      - name: Deploy to GitHub Pages
+      - name: Install dependencies 📦
+        run: npm install
+        
+      - name: Build project 🔧
+        run: npm run build -- --mode v20
+        
+      - name: Deploy to GitHub Pages 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: dist
           branch: gh-pages
-          clean: true
+          token: ${{ secrets.GITHUB_TOKEN }}

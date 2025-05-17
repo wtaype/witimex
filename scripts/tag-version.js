@@ -21,7 +21,6 @@ try {
   }
 
   // Buscar el index.html en el directorio correcto
-  // Primero intentamos en el directorio actual y luego en el directorio raíz
   let indexPath = './index.html';
   
   if (!fs.existsSync(indexPath)) {
@@ -37,10 +36,10 @@ try {
   console.log(`Actualizando archivo: ${indexPath}`);
   let indexContent = fs.readFileSync(indexPath, 'utf8');
   
-  // Buscar la línea donde está el título del Dashboard
+  // Modificar para buscar solo "Dashboard" en lugar de "Dashboard de Tiempo"
   indexContent = indexContent.replace(
-    /(Dashboard de Tiempo)[^<]*/,
-    `Dashboard de Tiempo ${version} `
+    /(<h1 class="page-title" id="pageTitle">Dashboard)([^<]*)/,
+    `$1 ${version}$2`
   );
   
   fs.writeFileSync(indexPath, indexContent);
