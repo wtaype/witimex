@@ -10,7 +10,7 @@ lerna-debug.log*
 # Dependencias
 node_modules/
 
-# Archivos de construcción
+# Archivos de construcción (excepto los necesarios para GitHub Pages)
 dist/
 dist-ssr/
 
@@ -46,10 +46,12 @@ Thumbs.db
 
 # Archivos de Git
 .git/
-.gitignore
 
 # Otros
 coverage/
 *.pid
 *.seed
 *.pid.lock
+
+# Excepciones para GitHub Pages
+!versions/ # Asegúrate de no ignorar la carpeta de versiones
